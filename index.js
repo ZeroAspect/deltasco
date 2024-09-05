@@ -5,7 +5,7 @@ require("./routes.js")
 
 app.engine('handlebars', hbs.engine())
 app.set('view engine', 'handlebars')
-app.set('views', './views')
+app.set('views', path.join(__dirname + '/views'))
 app.listen(3000, ()=>{
   console.log("Server running on host http://localhost:3000")
 })
