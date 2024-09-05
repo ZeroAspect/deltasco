@@ -31,7 +31,7 @@ app.get('/', async(req, res)=>{
 })
 
 app.get('/login', async(req, res)=>{
-  const ip = GetIP()
+  const ip = await GetIP()
   try{
     const user = await User.findOne({
       where: {
