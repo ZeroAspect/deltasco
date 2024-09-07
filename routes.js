@@ -53,12 +53,13 @@ app.get('/login', async(req, res)=>{
 })
 app.post('/login', async(req, res)=>{
   const ip = await GetIP()
-  const { email, password } = await req.body
+  const { email, senha } = await req.body
+  console.log(req.body)
   try{
     const user = await User.findOne({
       where: {
         email: email,
-        password: password
+        senha: senha
       }
     })
     if(user === null){
@@ -76,6 +77,23 @@ app.post('/login', async(req, res)=>{
       )
       console.log(newUser)
       res.redirect('/')
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+app.get('/cadastro', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user !== null){
+      res.redirect('/')
+    } else {
+      res.render('cadastro')
     }
   } catch (error){
     console.log("Houve um erro:", error)
