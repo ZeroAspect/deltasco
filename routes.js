@@ -74,6 +74,7 @@ app.post('/login', async(req, res)=>{
           },
         },
       )
+      console.log(newUser)
       res.redirect('/')
     }
   } catch (error){
