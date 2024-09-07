@@ -1,1 +1,35 @@
-<h1>Login</h1>
+<div class="container">
+  <h2>
+    Login
+  </h2>
+  <hr>
+  <form action="/login" method="post">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="mb-3">
+      <label for="senha" class="form-label">Senha</label>
+      <input type="password" class="form-control" id="senha" name="senha" required>
+      <div class="form-check">
+        <input type="checkbox" id="showPassword">
+        <label for="showPassword">Mostrar Senha</label>
+      </div>
+    </div>
+    <div class="mb-3 d-grid gap-2">
+      <button type="submit" class="btn btn-success">Entrar</button>
+      <a href="/cadastro" class="btn btn-outline-success">Cadastrar</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  "use strict"
+
+  const input = document.getElementById("senha")
+  const checkbox = document.getElementById("showPassword")
+
+  checkbox.addEventListener("change", ()=>{
+    input.type = checkbox.checked? "text" : "password"
+  })
+</script>

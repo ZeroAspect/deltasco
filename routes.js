@@ -7,6 +7,10 @@ const createConnection = require("./mysql/connection.js");
 const User = require("./data/User.js");
 
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+
+
 app.get('/', async(req, res)=>{
   const mysql = createConnection()
   const ip = await GetIP()
@@ -42,6 +46,35 @@ app.get('/login', async(req, res)=>{
       res.redirect('/')
     } else {
       res.render('login')
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+app.post('/login', async(req, res)=>{
+  const ip = await GetIP()
+  const { email, password } = await req.body
+  try{
+    const user = await User.findOne({
+      where: {
+        email: email,
+        password: password
+      }
+    })
+    if(user === null){
+
+      res.redirect('/login')
+    } else {
+      const newUser = User.update(
+        { ip: ip.ip },
+        {
+          where: {
+            email: email,
+            senha: senha
+          },
+        },
+      )
+      res.redirect('/')
     }
   } catch (error){
     console.log("Houve um erro:", error)
