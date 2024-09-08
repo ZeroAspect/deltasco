@@ -5,6 +5,7 @@ const path = require("path");
 const GetIP = require("./tools/ip.js");
 const createConnection = require("./mysql/connection.js");
 const User = require("./data/User.js");
+const { marked } = require("marked");
 
 
 app.use(express.json())
@@ -20,13 +21,25 @@ app.get('/', async(req, res)=>{
         ip: ip.ip
       }
     })
-    console.log(user)
+    // console.log(user)
+    const notify = {
+      success: {
+        title: "Login realizado com sucesso!",
+        message: `Login realizado com sucesso por ${user.nome} (${ip.ip})`
+      },
+      error: {
+        title: "Erro ao realizar login!",
+        message: "Houve um erro ao realizar o login com este IP"
+      }
+    }
     if(user === null){
-      console.error("Nenhum usuario encontrado no IP", ip.ip)
+      // console.error("Nenhum usuario encontrado no IP", ip.ip)
+      console.log(notify.error)
       res.redirect('/login')
     } else {
       res.render('home')
-      console.log("Usuario encontrado no IP", ip.ip)
+      // console.log("Usuario encontrado no IP", ip.ip)
+      console.log(notify.success)
     }
   } catch (error) {
     console.log("Houve um erro:", error)
@@ -95,6 +108,54 @@ app.get('/cadastro', async(req, res)=>{
     } else {
       res.render('cadastro')
     }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+app.post('/cadastro', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const {
+      nome,
+      email,
+      senha,
+      descricao
+    } = await req.body
+    console.log(req.body)
+    const removeSpaces = nome.replace(' ', '')
+    const nameFormated = removeSpaces.toLowerCase()
+    const user = await User.findOne({
+      where: {
+        nome: nameFormated,
+        email: email
+      }
+    })
+
+    if(user === null){
+      const newUser = await User.create({
+        nome: nameFormated,
+        email: email,
+        senha: senha,
+        descricao: marked(descricao),
+        ip: ip.ip
+      })
+      console.log(newUser)
+      res.redirect('/')
+    } else {
+      const validation = `
+      <div class="alert alert-danger" role="alert">
+        <h4>Cuidado!</h4>
+        <p>
+          Preencha dados ainda não usados.
+        </p>
+        <hr>
+        <p class="mb-0">Crie um nome de usuario que ainda não foi usado.</p>
+      </div>
+      `
+      res.render('cadastro', { validation })
+    }
+ 
+    
   } catch (error){
     console.log("Houve um erro:", error)
   }
