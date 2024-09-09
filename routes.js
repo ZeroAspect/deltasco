@@ -212,3 +212,30 @@ app.post('/publicar', async(req, res)=>{
     console.log("Houve um erro:", error)
   }
 })
+app.get('/post/:id', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      const post_id = req.params.id
+      const post = await Post.findOne({
+        where: {
+          id: post_id
+        }
+      })
+      if(post === null){
+        res.render('error_post_not_localized')
+      } else {
+        res.render('post', { post })
+      }
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
