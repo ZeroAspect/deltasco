@@ -6,6 +6,7 @@ const GetIP = require("./tools/ip.js");
 const createConnection = require("./mysql/connection.js");
 const User = require("./data/User.js");
 const { marked } = require("marked");
+const Post = require("./data/Post.js");
 
 
 app.use(express.json())
@@ -13,7 +14,7 @@ app.use(express.urlencoded({ extended: false }))
 
 
 app.get('/', async(req, res)=>{
-  const mysql = createConnection()
+  const mysql = await createConnection()
   const ip = await GetIP()
   try {
     const user = await User.findOne({
@@ -25,7 +26,7 @@ app.get('/', async(req, res)=>{
     const notify = {
       success: {
         title: "Login realizado com sucesso!",
-        message: `Login realizado com sucesso por ${user.nome} (${ip.ip})`
+        message: `Login realizado com sucesso por ${ip.ip}`
       },
       error: {
         title: "Erro ao realizar login!",
@@ -33,13 +34,16 @@ app.get('/', async(req, res)=>{
       }
     }
     if(user === null){
-      // console.error("Nenhum usuario encontrado no IP", ip.ip)
-      console.log(notify.error)
+      console.error("Nenhum usuario encontrado no IP", ip.ip)
+      // console.log(notify.error.message)
       res.redirect('/login')
     } else {
-      res.render('home')
-      // console.log("Usuario encontrado no IP", ip.ip)
-      console.log(notify.success)
+      console.log("Usuario encontrado no IP", ip.ip)
+      const [ posts, results ] = await mysql.query(`SELECT * FROM Posts ORDER BY id DESC`)
+      console.log(posts)
+
+      res.render('home', { posts })
+      // console.log(notify.success.message)
     }
   } catch (error) {
     console.log("Houve um erro:", error)
@@ -79,7 +83,7 @@ app.post('/login', async(req, res)=>{
 
       res.redirect('/login')
     } else {
-      const newUser = User.update(
+      const newUser = await User.update(
         { ip: ip.ip },
         {
           where: {
@@ -156,6 +160,54 @@ app.post('/cadastro', async(req, res)=>{
     }
  
     
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+app.get('/publicar', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      res.render('publicar')
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+
+app.post('/publicar', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const {
+      titulo,
+      conteudo,
+      fonte
+    } = await req.body
+    console.log(req.body)
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      const newPost = await Post.create({
+        nome: user.nome,
+        titulo: titulo,
+        conteudo: marked(conteudo),
+        fonte: fonte
+      })
+      console.log(newPost)
+      res.redirect('/')
+    }
   } catch (error){
     console.log("Houve um erro:", error)
   }

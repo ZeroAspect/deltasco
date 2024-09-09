@@ -1,1 +1,22 @@
-<h1>Hello World!!</h1>
+<div class="container">
+  {{#each posts}}
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <a href="/{{nome}}">{{nome}}</a>
+        <form action="/post/{{id}}/likes" method="post">
+          <button type="submit" class="btn btn-outlline-danger">
+            <i class="fa fa-heart"></i> {{post_likes}}
+          </button>
+        </form>
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <h6><a href="/post/{{id}}/{{titulo}}">{{titulo}}</a></h6>
+        </div>
+        <div class="card-text">
+          
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

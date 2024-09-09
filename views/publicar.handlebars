@@ -1,0 +1,27 @@
+<div class="container">
+  <h2>
+    Novo conteúdo
+  </h2>
+  <small class="text-muted">
+    Campos marcados por asterisco (<strong class="text-danger">*</strong>) são obrigatórios.
+  </small>
+  <hr>
+  <form action="/publicar" method="post">
+    <div class="mb-3">
+      <label for="titulo" class="form-label">Título <strong class="text-danger">*</strong></label>
+      <input type="text" class="form-control" id="titulo" name="titulo" required>
+    </div>
+    <div class="mb-3">
+      <label for="conteudo" class="form-label">Conteúdo <strong class="text-danger">*</strong></label>
+      <textarea class="form-control" id="conteudo" name="conteudo" rows="10" style="height: 144px;" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="fonte" class="form-label">Fonte</label>
+      <input type="text" class="form-control" id="fonte" name="fonte" required placeholder="https://exemplo.edu">
+    </div>
+    <div class="mb-3 d-grid gap-2">
+      <button type="submit" class="btn btn-success">Publicar</button>
+      <button type="reset" class="btn btn-outline-secondary">Limpar</button>
+    </div>
+  </form>
+</div>
