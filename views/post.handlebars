@@ -1,5 +1,33 @@
-<div class="container d-flex align-items-center">
-  <h2>
-    PÁGINA EM DESENVOLVIMENTO!
-  </h2>
+<div class="p-3">
+  {{#each row}}
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <a href="/{{nome}}">{{nome}}</a>
+        <form action="/post/{{id}}/likes" method="post">
+          <button type="submit" class="btn btn-outlline-danger">
+            <i class="fa fa-heart"></i> {{post_likes}}
+          </button>
+        </form>
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <h5>
+            {{titulo}}
+          </h5>
+        </div>
+        <div class="card-text">
+          {{{conteudo}}}
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-between">
+          <span>
+            <i class="fa fa-calendar"></i> {{createdAt}}
+          </span>
+          {{!-- <span>
+            <i class="fa fa-comment"></i> {{comentarios.length}}
+          </span> --}}
+      </div>
+    </div>
+  {{/each}}
 </div>

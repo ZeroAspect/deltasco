@@ -213,6 +213,7 @@ app.post('/publicar', async(req, res)=>{
   }
 })
 app.get('/post/:id', async(req, res)=>{
+  const mysql = await createConnection()
   const ip = await GetIP()
   try{
     const user = await User.findOne({
@@ -232,10 +233,48 @@ app.get('/post/:id', async(req, res)=>{
       if(post === null){
         res.render('error_post_not_localized')
       } else {
-        res.render('post', { post })
+        const [ row, results ] = await mysql.query(`SELECT * FROM Posts WHERE id = '${post_id}'`)
+        res.render('post', { row })
       }
     }
   } catch (error){
     console.log("Houve um erro:", error)
+  }
+})
+app.post('/post/:id/likes', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.status(401).json({ error: 'Unauthorized' })
+    } else {
+      const post_id = req.params.id
+      const post = await Post.findOne({
+        where: {
+          id: post_id
+        }
+      })
+      if(post === null){
+        res.redirect('/login')
+      } else {
+        const post_like = await Post.update({
+          post_likes: post.post_likes + 1
+        },
+        {
+          where: {
+            id: post_id
+          }
+        })
+        console.log(post_like)
+        res.status(200).redirect(`/`)
+      }
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+    res.status(500).json({ error: 'Internal server error' })
   }
 })
