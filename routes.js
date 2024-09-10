@@ -7,6 +7,7 @@ const createConnection = require("./mysql/connection.js");
 const User = require("./data/User.js");
 const { marked } = require("marked");
 const Post = require("./data/Post.js");
+const Comentarios = require("./data/Comentarios.js");
 
 
 app.use(express.json())
@@ -234,7 +235,8 @@ app.get('/post/:id', async(req, res)=>{
         res.render('error_post_not_localized')
       } else {
         const [ row, results ] = await mysql.query(`SELECT * FROM Posts WHERE id = '${post_id}'`)
-        res.render('post', { row })
+        const [ comentario, response ] = await mysql.query(`SELECT * FROM Comentarios WHERE post_id = '${post_id}'`)
+        res.render('post', { row, comentario })
       }
     }
   } catch (error){
@@ -271,6 +273,41 @@ app.post('/post/:id/likes', async(req, res)=>{
         })
         console.log(post_like)
         res.status(200).redirect(`/`)
+      }
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+app.post('/post/:id/comentario', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.status(401).json({ error: 'Unauthorized' })
+    } else {
+      const post_id = req.params.id
+      const { conteudo } = await req.body
+      console.log(req.body)
+      const post = await Post.findOne({
+        where: {
+          id: post_id
+        }
+      })
+      if(post === null){
+        res.redirect('/login')
+      } else {
+        const newComment = await Comentarios.create({
+          nome: user.nome,
+          conteudo: marked(conteudo),
+          post_id: post_id
+        })
+        return res.redirect(`/post/${post_id}`)
       }
     }
   } catch (error){

@@ -1,5 +1,5 @@
-<div class="p-3">
-  {{#each row}}
+{{#each row}}
+  <div class="p-3 mb-3">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
         <a href="/{{nome}}">{{nome}}</a>
@@ -29,5 +29,44 @@
           </span> --}}
       </div>
     </div>
-  {{/each}}
-</div>
+  </div>
+  <br>
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <span>
+          <i>Comentário</i>
+        </span>
+      </div>
+      <div class="card-body">
+        <form action="/post/{{id}}/comentario" method="post">
+          <div class="mb-2">
+            <textarea class="form-control" name="conteudo" rows="3" placeholder="Escreva um comentário..."></textarea>
+          </div>
+          <div class="mb-2">
+            <button type="submit" class="btn btn-success"><i>Comentar</i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{{/each}}
+{{#each comentario}}
+  <div class="p-3">
+    <div class="card">
+      <div class="card-header">
+        <a href="/{{nome}}">{{nome}}</a>
+      </div>
+      <div class="card-body">
+        {{{conteudo}}}
+        <blockquote class="blockquote mb-0">
+          <footer class="blockquote-footer">
+            <small class="text-muted">
+              {{createdAt}}
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+{{/each}}
