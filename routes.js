@@ -315,3 +315,24 @@ app.post('/post/:id/comentario', async(req, res)=>{
     res.status(500).json({ error: 'Internal server error' })
   }
 })
+app.get('/:nome', async(req, res)=>{
+  const mysql = await createConnection()
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      const nome = req.params.nome
+      const [ row, results ] = await mysql.query(`SELECT * FROM Users WHERE nome = '${nome}'`)
+      const userVerificed = "josecipriano"
+      res.render('findUser', { row, userVerificed })
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})

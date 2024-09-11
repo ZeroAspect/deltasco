@@ -1,0 +1,32 @@
+<div class="container">
+  {{#each row}}
+    <h3>
+      {{nome}}
+    </h3>
+    <small class="text-muted"><a href="/perfil">Editar seu perfil</a></small>
+    <hr>
+    <div class="card">
+      <div class="card-header">
+        <a href="/{{nome}}">{{nome}}</a>
+        <span class="badge bg-primary float-end">
+          {{#if nome}}
+            <i class="fa fa-user"></i>
+          {{/if}}
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="card-text">
+          {{{descricao}}}
+        </div>
+        <br>
+        <blockquote class="blockquote mb-0">
+          <footer class="blockquote-footer">
+            <small class="text-small text-muted">
+              Conta criada em {{createdAt}}
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  {{/each}}
+</div>

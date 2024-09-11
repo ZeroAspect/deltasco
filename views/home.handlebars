@@ -1,3 +1,6 @@
+<div class="mb-3 d-flex align-items-center justify-content-center">
+  <a href="/publicar" class="btn btn-outline-primary">Criar uma nova publicação</a>
+</div>
 <div class="container">
   {{#each posts}}
     <div class="card">
@@ -13,9 +16,11 @@
         <div class="card-title">
           <h6><a href="/post/{{id}}">{{titulo}}</a></h6>
         </div>
-        <div class="card-text">
-          
-        </div>
+        <blockquote class="blockquote mb-0">
+          <footer class="blockquote-footer">
+            <small class="text-muted">Postado em {{createdAt}}</small>
+          </footer>
+        </blockquote>
       </div>
     </div>
   {{/each}}
