@@ -336,3 +336,24 @@ app.get('/:nome', async(req, res)=>{
     console.log("Houve um erro:", error)
   }
 })
+app.get('/perfil', async(req, res)=>{
+  const mysql = await createConnection()
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      const user_id = user.id
+      const [ row, results ] = await mysql.query(`SELECT * FROM Users WHERE id = '${user_id}'`)
+      // res.render('profile', { row })
+      res.json(row)
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
