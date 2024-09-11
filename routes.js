@@ -13,7 +13,6 @@ const Comentarios = require("./data/Comentarios.js");
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-
 app.get('/', async(req, res)=>{
   const mysql = await createConnection()
   const ip = await GetIP()
@@ -351,6 +350,32 @@ app.get('/:nome', async(req, res)=>{
       const [ row, results ] = await mysql.query(`SELECT * FROM Users WHERE nome = '${nome}'`)
       const userVerificed = "josecipriano"
       res.render('findUser', { row, userVerificed })
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+app.post('/perfil', async(req, res)=>{
+  const mysql = await createConnection()
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      const { nome, email, senha, descricao } = await req.body
+      console.log(req.body)
+      const [ update, results ] = await mysql.query(`
+        UPDATE Users
+        SET nome = '${nome}', email = '${email}', senha = '${senha}', descricao = '${marked(descricao)}'
+        WHERE ip = '${ip.ip}'
+        `)
+      console.log(update)
+      res.redirect(`/${nome}`)
     }
   } catch (error){
     console.log("Houve um erro:", error)
