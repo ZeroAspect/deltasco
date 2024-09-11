@@ -1,0 +1,16 @@
+{
+  "version": 1.0,
+  "routes": [
+    "/api",
+    "/api/v1",
+    "/api/v1/user/:nome",
+    "/api/v1/user/:id",
+    "/api/v1/user/:id/posts",
+    "/api/v1/user/:id/posts/:postId",
+    "/api/v1/post/:id",
+    "/api/v1/post/:id/comments",
+    "/api/v1/post/:id/comments/:commentId",
+    "/api/v1/comment/:id",
+    "/api/v1/comment/:post_id"
+  ]
+}
