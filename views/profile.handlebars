@@ -1,0 +1,41 @@
+<div class="container">
+  <h2>
+    Editar perfil
+  </h2>
+  {{#each row}}
+    <form action="/perfil" method="post">
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="nome" name="nome" value="{{nome}}" readonly>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{email}}">
+      </div>
+      <div class="mb-3">
+        <label for="senha" class="form-label">Senha</label>
+        <input type="password" class="form-control" id="senha" name="senha" value="{{senha}}">
+      </div>
+      <div class="mb-3">
+        <input type="checkbox" class="form-check-input" id="showPassword" aria-describedby="showPasswordLabel">
+        <label for="showPassword" class="form-label">Mostrar senha</label>
+      </div>
+      <div class="mb-3">
+        <label for="descricao" class="form-label">Descricao</label>
+        <textarea class="form-control" id="descricao" name="descricao" rows="3" style="height: 144px;">{{descricao}}</textarea>
+      </div>
+      <div class="mb-3 d-grid gap-2">
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <a href="/" class="btn btn-danger">Cancelar</a>
+      </div>
+    </form>
+  {{/each}}
+</div>
+
+<script>
+  const showPassword = document.getElementById('showPassword');
+  showPassword.addEventListener('change', () => {
+    const passwordInput = document.getElementById('senha');
+    passwordInput.type = showPassword.checked? 'text' : 'password';
+  });
+</script>
