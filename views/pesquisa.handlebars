@@ -1,0 +1,27 @@
+<div class="container">
+  <h2>
+    Pesquisas encontradas
+  </h2>
+  <hr>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Titulo</th>
+        <th>Fonte</th>
+        <th>Curtidas</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each row}}
+        <tr>
+          <td>{{id}}</td>
+          <td><a href="/{{nome}}">{{nome}}</a></td>
+          <td><a href="/post/{{id}}">{{titulo}}</a></td>
+          <td><a href="{{fonte}}">{{fonte}}</a></td>
+          <td>{{post_likes}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+</div>

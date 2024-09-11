@@ -254,7 +254,7 @@ app.get('/post/:id', async(req, res)=>{
         res.render('error_post_not_localized')
       } else {
         const [ row, results ] = await mysql.query(`SELECT * FROM Posts WHERE id = '${post_id}'`)
-        const [ comentario, response ] = await mysql.query(`SELECT * FROM Comentarios WHERE post_id = '${post_id}'`)
+        const [ comentario, response ] = await mysql.query(`SELECT * FROM Comentarios WHERE post_id = '${post_id}' ORDER BY id DESC`)
         res.render('post', { row, comentario })
       }
     }
@@ -379,5 +379,53 @@ app.post('/perfil', async(req, res)=>{
     }
   } catch (error){
     console.log("Houve um erro:", error)
+  }
+})
+app.get('/pesquisa', async(req, res)=>{
+  const mysql = await createConnection()
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      res.render('pesquisa')
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+app.post('/pesquisa', async(req, res)=>{
+  const mysql = await createConnection()
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.redirect('/login')
+    } else {
+      const { pesquisa } = await req.body
+      console.log(req.body)
+      const [ row, results ] = await mysql.query(`SELECT * FROM Posts WHERE titulo = '${pesquisa}'`)
+      res.render('pesquisa', { row })
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+  }
+})
+app.get('/api', async(req, res)=>{
+  const mysql = await createConnection()
+  try{
+    res.render('api/v1/page')
+  } catch (error){
+    console.log("Houve um erro:", error)
+    res.status(500).json({ error: 'Internal server error' })
   }
 })

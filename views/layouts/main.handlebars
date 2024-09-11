@@ -26,8 +26,8 @@
       <div class="container d-flex flex-wrap">
         <ul class="nav me-auto">
           <li class="nav-item"><a href="/" class="nav-link link-body-emphasis px-2 active" aria-current="page">Home</a></li>
-          <li class="nav-item"><a href="/" class="nav-link link-body-emphasis px-2">Recentes</a></li>
-          <li class="nav-item"><a href="/destaques" class="nav-link link-body-emphasis px-2">Destaques</a></li>
+          <li class="nav-item"><a href="/api" class="nav-link link-body-emphasis px-2">Api</a></li>
+          <li class="nav-item"><a href="/termos-de-uso" class="nav-link link-body-emphasis px-2">Termos</a></li>
         </ul>
         <ul class="nav">
           <li class="nav-item"><a href="/perfil" class="nav-link link-body-emphasis px-2">Perfil</a></li>
@@ -40,8 +40,8 @@
         <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
           <span class="fs-4">Delta`s Co</span>
         </a>
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search" method="post" action="/pesquisa">
+          <input type="search" class="form-control" name="pesquisa" placeholder="Pesquisar um titulo..." aria-label="Search">
         </form>
       </div>
     </header>
