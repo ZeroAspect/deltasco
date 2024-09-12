@@ -50,6 +50,15 @@ app.get('/', async(req, res)=>{
   }
   
 })
+app.get('/api', async(req, res)=>{
+  const mysql = await createConnection()
+  try{
+    res.render('api/v1/page')
+  } catch (error){
+    console.log("Houve um erro:", error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
 app.get('/perfil', async(req, res)=>{
   const mysql = await createConnection()
   const ip = await GetIP()
@@ -420,10 +429,47 @@ app.post('/pesquisa', async(req, res)=>{
     console.log("Houve um erro:", error)
   }
 })
-app.get('/api', async(req, res)=>{
+app.get('/api/v1', async(req, res)=>{
+  const ip = await GetIP()
+  try{
+    const user = await User.findOne({
+      where: {
+        ip: ip.ip
+      }
+    })
+    if(user === null){
+      res.status(401).json({ error: 'Unauthorized' })
+    } else {
+      res.json({
+        message: 'API rodando corretamente!',
+        rotas: [
+          '/api/v1/posts',
+          '/api/v1/posts/:id',
+          '/api/v1/posts/:id/likes',
+          '/api/v1/posts/:id/comentario',
+          '/api/v1/users/:nome',
+          '/api/v1/pesquisa'
+        ],
+        user: {
+          nome: user.nome,
+          email: user.email
+        },
+       })
+    }
+  } catch (error){
+    console.log("Houve um erro:", error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+app.get('/api/v1/posts', async(req, res)=>{
   const mysql = await createConnection()
   try{
-    res.render('api/v1/page')
+    const posts = await Post.findAll({
+      order: [
+        ['id', 'DESC']
+      ]
+    })
+    res.json(posts)
   } catch (error){
     console.log("Houve um erro:", error)
     res.status(500).json({ error: 'Internal server error' })
